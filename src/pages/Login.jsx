@@ -1,6 +1,77 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Login() {
+
+   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+   const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleLogin= async (e)=>{
+     
+     e.preventDefault();
+
+    let newErrors = {};
+
+       // Email Validation
+  if (!form.email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+  ) {
+    newErrors.email = "Please enter a valid email";
+  }
+
+  // Password Validation
+  if (!form.password.trim()) {
+    newErrors.password = "Password is required";
+  } else if (form.password.length < 6) {
+    newErrors.password =
+      "Password must be at least 6 characters";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) {
+    return;
+  }
+
+   try {
+
+      // LOGIN API
+      const res = await axios.post(
+        "https://food-1-vq0o.onrender.com/api/auth/login",
+        form
+      );
+
+      console.log(res.data);
+
+      // STORE USER
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
+
+      alert("Login Successful");
+
+      navigate("/menu");
+
+    }
+
+    catch (error) {
+
+      console.log(error);
+
+      alert("Invalid Email or Password");
+    }
+
+  
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-100 flex items-center justify-center px-4">
       
@@ -20,17 +91,38 @@ export default function Login() {
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form onSubmit= {handleLogin} className="space-y-5">
           <div>
             <label className="block text-gray-700 font-medium mb-2">
               Email
             </label>
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full px-4 py-3 border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
+             <input
+    type="email"
+    placeholder="Enter your email"
+    value={form.email}
+    className={`w-full mt-1 p-3 rounded-lg border ${
+      errors.email
+        ? "border-red-500"
+        : "border-gray-300"
+    } focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+    onChange={(e) => {
+      setForm({
+        ...form,
+        email: e.target.value,
+      });
+
+      setErrors({
+        ...errors,
+        email: "",
+      });
+    }}
+  />
+   {errors.email && (
+    <p className="text-red-500 text-sm mt-1">
+      {errors.email}
+    </p>
+  )}
           </div>
 
           <div>
@@ -38,11 +130,33 @@ export default function Login() {
               Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full px-4 py-3 border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
+             <input
+    type="password"
+    placeholder="Enter your password"
+    value={form.password}
+    className={`w-full mt-1 p-3 rounded-lg border ${
+      errors.password
+        ? "border-red-500"
+        : "border-gray-300"
+    } focus:outline-none focus:ring-2 focus:ring-indigo-400`}
+    onChange={(e) => {
+      setForm({
+        ...form,
+        password: e.target.value,
+      });
+
+      setErrors({
+        ...errors,
+        password: "",
+      });
+    }}
+  />
+
+    {errors.password && (
+    <p className="text-red-500 text-sm mt-1">
+      {errors.password}
+    </p>
+  )}
           </div>
 
           <div className="flex justify-between text-sm">
