@@ -1,9 +1,8 @@
-import { Minus, Plus, Trash2 } from "lucide-react";
+import {  Trash2 } from "lucide-react";
 
 export default function CartItem({
   item,
-  increaseQuantity,
-  decreaseQuantity,
+
   removeFromCart,
 }) {
   return (
@@ -29,7 +28,7 @@ export default function CartItem({
       </div>
 
       {/* Quantity Controls */}
-      <div className="flex items-center gap-3">
+      {/* <div className="flex items-center gap-3">
         <button
           onClick={() => decreaseQuantity(item.id)}
           className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
@@ -47,7 +46,7 @@ export default function CartItem({
         >
           <Plus size={16} />
         </button>
-      </div>
+      </div> */}
 
       {/* Total Price */}
       <div className="font-bold text-orange-600">

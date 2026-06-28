@@ -1,7 +1,11 @@
 import { foods } from "../data/foods";
 import FoodCard from "../components/FoodCard";
+import { useCart } from "../context/useCart";
+import{Link} from "react-router-dom";
 
 export default function Menu() {
+  const { cart } = useCart();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-yellow-50">
       
@@ -33,6 +37,17 @@ export default function Menu() {
           ))}
         </div>
       </div>
+     
+      {/* Go to Cart Button */}
+      <div className="flex justify-center pb-16">
+     <Link
+  to="/cart"
+  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+
+  🛒 Go to Cart ({cart.length})
+    </Link>
+      </div>
+
     </div>
   );
 }
