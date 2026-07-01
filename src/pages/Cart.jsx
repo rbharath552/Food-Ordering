@@ -1,5 +1,6 @@
 import { useCart } from "../context/useCart";
 import CartItem from "../components/CartItem";
+import {useNavigate} from "react-router-dom";
 
 export default function Cart() {
   const {
@@ -15,6 +16,12 @@ export default function Cart() {
       sum + item.price * item.quantity,
     0
   );
+   const navigate = useNavigate();
+
+   const handlePlaceOrder = () => {
+    placeOrder();        // Save the order
+    navigate("/orders"); // Navigate to Orders page
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -43,7 +50,7 @@ export default function Cart() {
 
 
             <button
-              onClick={placeOrder}
+              onClick={handlePlaceOrder}
               className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600"
             >
               Place Order
